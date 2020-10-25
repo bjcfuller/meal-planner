@@ -1,0 +1,23 @@
+# Specify project environments
+env:
+  es6: true
+  browser: true
+
+# Configure rules
+rules:
+    no-undef: warn
+    no-unused-vars: warn
+    no-bitwise: warn
+    no-alert: warn
+    no-console:
+      - error
+      - allow:
+        - warn
+        - error
+    jsx-a11y/label-has-for: off
+
+# Specify files and directories to ignore
+ignorePatterns:
+    - 'gulpfile.js'
+    - 'js/main.built.js'
+    - 'node_modules/'
