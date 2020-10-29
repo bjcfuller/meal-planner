@@ -17,8 +17,6 @@
 	function getData( success ) {
   	const req = new XMLHttpRequest();
 
-	  //console.log( 'trying to retrieve data...' );
-
 		req.onreadystatechange = function() {
 			if ( req.readyState == XMLHttpRequest.DONE && req.status == 200 ) {
 				success( req.responseText );
@@ -39,8 +37,6 @@
    * @param data obj the raw data
    */
   function parse( d ) {
-
-    //console.log( 'data retrieved, attempting to parse...' );
 
     const data = JSON.parse( d );
     const entries = data.feed.entry;
@@ -65,31 +61,41 @@
 
       M.data.all.push( entry );
 
-			// sort entries into time groups
-			switch ( entry.time ) {
-				case '<30':
-					M.data.short.push( entry );
-					break;
-				case '30-60':
-					M.data.medium.push( entry );
-					break;
-				case '>60':
-					M.data.long.push( entry );
-					break;
-				default:
-					break;
+			if ( '' !== entry.time ) {
+				M.data[entry.time].push( entry );
 			}
 
     }
-
-    console.log( 'M', M );
-    //console.log( 'done parsing, continuing on to init' );
 
 		init();
 
   }
 
-	function getUnique( count ) {
+	function getUniqueItem( t ) {
+
+		let item,
+				loop = true;
+
+		while ( loop ) {
+
+			loop = false;
+			item = M.data[t][Math.floor( Math.random() * M.data[t].length )];
+
+			for ( let i = 0; i < M.unique.length; i++ ) {
+				if ( item.name == M.unique[i].name ) {
+					loop = true;
+					break;
+				}
+			}
+
+		}
+
+		return item;
+
+	}
+
+	function getUniqueItems( count ) {
+
 	  // Make a copy of the array
 	  const tmp = M.data.all.slice( M.data.all );
 	  const ret = [];
@@ -97,25 +103,40 @@
 	  for ( let i = 0; i < count; i++ ) {
 	    const index = Math.floor( Math.random() * tmp.length );
 	    const removed = tmp.splice( index, 1 );
+
 	    // Since we are only removing one element
 	    ret.push( removed[0] );
 	  }
+
 	  return ret;
+
 	}
 
 	function init() {
 
-		const unique = getUnique(14);
-
-		console.log( unique );
+		M.unique = getUniqueItems( 14 );
 
 		const ul = document.createElement( 'ul' );
 
-		for ( let i = 0 ; i < unique.length; i++ ) {
-			ul.appendChild( buildItem( unique[i] ) );
+		for ( let i = 0 ; i < M.unique.length; i++ ) {
+			ul.appendChild( buildItem( M.unique[i] ) );
 		}
 
 		M.dom.output.appendChild( ul );
+
+	}
+
+	function toggleRefreshMenu( item ) {
+
+		item.classList.toggle( 'refresh-open' );
+
+	}
+
+	function refreshItem( li, item, refreshData ) {
+
+		const newitem = getUniqueItem( refreshData.time )
+
+		console.log( 'returned', newitem.name );
 
 	}
 
@@ -141,6 +162,27 @@
 		const refresh = document.createElement( 'div' );
 		refresh.className = 'item-refresh';
 		refresh.innerHTML = 'Refresh';
+
+		const refreshMenu = document.createElement( 'ul' );
+		refreshMenu.className = 'refresh-menu';
+
+		const listItems = [
+			{ text: 'Any time', class: 'refresh-any-time', time: 'all' },
+			{ text: 'Under 30 minutes', class: 'refresh-30', time: 'short' },
+			{ text: '30 - 60 minutes', class: 'refresh-30-60', time: 'medium' },
+			{ text: 'Over 60 minutes', class: 'refresh-60', time: 'long' }
+		];
+
+		for ( let i = 0; i < listItems.length; i++ ) {
+			const listItem = document.createElement( 'li' );
+			listItem.className = listItems[i].class;
+			listItem.innerHTML = listItems[i].text;
+			listItem.addEventListener( 'click', refreshItem.bind( null, li, item, listItems[i] ), false );
+			refreshMenu.appendChild( listItem );
+		}
+
+		refresh.appendChild( refreshMenu );
+		refresh.addEventListener( 'click', toggleRefreshMenu.bind( null, li ), false );
 		li.appendChild( refresh );
 
 		return li;
