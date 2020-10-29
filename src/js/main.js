@@ -74,12 +74,16 @@
 	function getUniqueItem( t ) {
 
 		let item,
-				loop = true;
+				loop = true,
+				n = 0;
 
-		while ( loop ) {
+		const l = M.data[t].length;
+
+		while ( loop && n < l ) {
 
 			loop = false;
-			item = M.data[t][Math.floor( Math.random() * M.data[t].length )];
+			n++;
+			item = M.data[t][Math.floor( Math.random() * l )];
 
 			for ( let i = 0; i < M.unique.length; i++ ) {
 				if ( item.name == M.unique[i].name ) {
@@ -135,6 +139,7 @@
 	function refreshItem( li, item, refreshData ) {
 
 		const newitem = getUniqueItem( refreshData.time )
+		M.unique.push( newitem );
 
 		console.log( 'returned', newitem.name );
 
