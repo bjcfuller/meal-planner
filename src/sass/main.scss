@@ -1,37 +1,6 @@
 /* ======= MAIN ======= */
 
-
-ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-li:nth-child( odd ) {
-  background: #eee;
-}
-
-li > div {
-  padding: 1rem;
-  display: inline-block;
-}
-
-.item-refresh:hover {
-  color: #00f;
-  cursor: pointer;
-}
-
-.refresh-menu {
-
-  display: none;
-
-  li:hover {
-    color: #f00;
-    cursor: pointer;
-  }
-
-}
-
-li.refresh-open .refresh-menu {
-  display: block;
-}
+@import 'partials/variables';
+@import 'partials/reset';
+@import 'partials/base';
+@import 'partials/output';

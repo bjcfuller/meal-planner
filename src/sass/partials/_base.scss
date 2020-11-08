@@ -1,0 +1,39 @@
+/* ==============================
+   BASE
+   ============================== */
+
+html {
+  background: #fafafa;
+}
+
+h1 {
+  font-size: 3rem;
+  font-family: $type-header;
+  margin: 3rem 0;
+}
+
+main {
+
+   margin: 0 auto 2rem;
+   padding: 0 25px;
+   width: 100%;
+   box-sizing: border-box;
+   transition: all .2s ease-in-out;
+
+   h1 {
+     padding: 2rem 0;
+     text-align: center;
+   }
+
+}
+
+@media all and (min-width: 1050px) {
+  main {
+      width: 1000px;
+      margin: 0 auto;
+      padding: 0;
+  }
+  main {
+       padding-bottom: 6rem;
+  }
+}

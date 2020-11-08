@@ -121,6 +121,7 @@
 		M.unique = getUniqueItems( 14 );
 
 		const ul = document.createElement( 'ul' );
+		ul.className = 'meal-list';
 
 		for ( let i = 0 ; i < M.unique.length; i++ ) {
 			ul.appendChild( buildItem( M.unique[i] ) );
@@ -148,25 +149,43 @@
 	function buildItem( item ) {
 
 		const li = document.createElement( 'li' );
+		li.classList = 'meal-item';
 
-		const name = document.createElement( 'div' );
+		const descriptors = document.createElement( 'div' );
+		descriptors.className = 'item-descriptors';
+		li.appendChild( descriptors );
+
+		const time = document.createElement( 'div' );
+		time.className = 'item-time ' + item.time;
+		switch ( item.time ) {
+			case 'short':
+				time.innerHTML = 'Under 30 minutes';
+				break;
+			case 'medium':
+				time.innerHTML = '30 - 60 minutes';
+				break;
+			case 'long':
+				time.innerHTML = 'Over 60 minutes';
+				break;
+			default:
+				time.innerHTML = 'Time not available';
+				break;
+		}
+		descriptors.appendChild( time );
+
+		const name = document.createElement( 'h2' );
 		name.className = 'item-name';
 		name.innerHTML = item.name;
-		li.appendChild( name );
+		descriptors.appendChild( name );
 
 		const ingredients = document.createElement( 'div' );
 		ingredients.className = 'item-ingredients';
 		ingredients.innerHTML = item.ingredients;
-		li.appendChild( ingredients );
-
-		const time = document.createElement( 'div' );
-		time.className = 'item-time';
-		time.innerHTML = item.time;
-		li.appendChild( time );
+		descriptors.appendChild( ingredients );
 
 		const refresh = document.createElement( 'div' );
 		refresh.className = 'item-refresh';
-		refresh.innerHTML = 'Refresh';
+		refresh.innerHTML = '<span class="refresh-icon">R</span>';
 
 		const refreshMenu = document.createElement( 'ul' );
 		refreshMenu.className = 'refresh-menu';

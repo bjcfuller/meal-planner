@@ -36,7 +36,7 @@ function styles(done) {
                 '',
                 ''].join('\n');
 
-	gulp.src('./src/sass/*.scss')
+	gulp.src('./src/sass/main.scss')
 		.pipe(sourcemaps.init())
 		.pipe(sass(sassOptions).on('error', sass.logError))
 		.pipe(concat('styles.built.css'))
@@ -91,7 +91,7 @@ gulp.task('scripts', scripts);
 function watcher(done) {
 
 	// watch for CSS changes
-	gulp.watch('./src/sass/*.scss', styles);
+	gulp.watch('./src/sass/**/*', styles);
 
   // watch for JS changes
 	gulp.watch('./src/js/*.js', scripts);
